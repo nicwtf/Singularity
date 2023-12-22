@@ -111,9 +111,9 @@ else
 			return
 		end
 
-		for v,k in pairs(impulse.Config.NPCSpawns) do
-			local cent = k.pos:ToScreen()
-			draw.SimpleText(k.type, "BudgetLabel", cent.x, cent.y)
+		for _,v in pairs(impulse.Config.NPCSpawns) do
+			local cent = v.pos:ToScreen()
+			draw.SimpleText(v.type, "BudgetLabel", cent.x, cent.y)
 		end
 	end
 
@@ -136,10 +136,10 @@ else
 		if LocalPlayer():IsAdmin() then
 			local activeWep =  LocalPlayer():GetActiveWeapon()
 			if activeWep and IsValid(activeWep) and activeWep:GetClass() == "impulse_npcspawneditor" then
-				for v,k in pairs(impulse.Config.NPCSpawns) do
+				for _,v in pairs(impulse.Config.NPCSpawns) do
 					render.SetColorMaterial()
 					render.SetColorModulation(yel.r / 255, yel.g / 255, yel.b / 255)
-					render.DrawSphere(k.pos, k.dist, 16, 16, stringColBasic(k.type))
+					render.DrawSphere(v.pos, v.dist, 16, 16, stringColBasic(v.type))
 				end
 			end
 		end

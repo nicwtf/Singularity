@@ -284,7 +284,7 @@ function SWEP:AllowEntityDrop()
 end
 
 local function IsPlayerStandsOn(ent)
-	for v,ply in pairs(player.GetAll()) do
+	for _,ply in pairs(player.GetAll()) do
 		if ply:GetGroundEntity() == ent then
 			return true
 		end

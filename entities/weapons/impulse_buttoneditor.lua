@@ -172,10 +172,10 @@ else
 
 		local lpPos = LocalPlayer():GetPos()
 
-		for v,k in pairs(impulse.Config.Buttons) do
-			if lpPos:DistToSqr(k.pos) < 900 ^ 2 then
-				local cent = k.pos:ToScreen()
-				draw.SimpleText(k.desc or "ScriptedButton", "ChatFont", cent.x, cent.y)
+		for k,v in pairs(impulse.Config.Buttons) do
+			if lpPos:DistToSqr(v.pos) < 900 ^ 2 then
+				local cent = v.pos:ToScreen()
+				draw.SimpleText(v.desc or "ScriptedButton", "ChatFont", cent.x, cent.y)
 			end
 		end
 	end

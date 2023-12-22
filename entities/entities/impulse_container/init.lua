@@ -55,8 +55,8 @@ function ENT:MakeLoot()
 
 		self.Inventory = {}
 
-		for v,k in pairs(loot) do
-			self:AddItem(v, k, true)	
+		for k, v in pairs(loot) do
+			self:AddItem(k, v, true)	
 		end
 
 		self:UpdateUsers()
@@ -111,9 +111,9 @@ end
 function ENT:GetStorageWeight()
 	local weight = 0
 
-	for v,k in pairs(self.Inventory) do
-		local item = impulse.Inventory.Items[impulse.Inventory.ClassToNetID(v)]
-		weight = weight + ((item.Weight or 0) * k)
+	for k,v in pairs(self.Inventory) do
+		local item = impulse.Inventory.Items[impulse.Inventory.ClassToNetID(k)]
+		weight = weight + ((item.Weight or 0) * v)
 	end
 
 	return weight
@@ -136,9 +136,9 @@ function ENT:AddUser(ply)
 	net.Start("impulseInvContainerOpen")
 	net.WriteUInt(table.Count(self.Inventory), 8)
 
-	for v,k in pairs(self.Inventory) do
-		local netid = impulse.Inventory.ClassToNetID(v)
-		local amount = k
+	for k,v in pairs(self.Inventory) do
+		local netid = impulse.Inventory.ClassToNetID(k)
+		local amount = v
 
 		net.WriteUInt(netid, 10)
 		net.WriteUInt(amount, 8)
@@ -157,21 +157,21 @@ end
 function ENT:UpdateUsers()
 	local pos = self:GetPos()
 
-	for v,k in pairs(self.Users) do
-		if IsValid(v) and pos:DistToSqr(v:GetPos()) < (230 ^ 2) then
+	for k,v in pairs(self.Users) do
+		if IsValid(k) and pos:DistToSqr(k:GetPos()) < (230 ^ 2) then
 			net.Start("impulseInvContainerUpdate")
 			net.WriteUInt(table.Count(self.Inventory), 8)
 
-			for v,k in pairs(self.Inventory) do
-				local netid = impulse.Inventory.ClassToNetID(v)
-				local amount = k
+			for k,v in pairs(self.Inventory) do
+				local netid = impulse.Inventory.ClassToNetID(k)
+				local amount = v
 
 				net.WriteUInt(netid, 10)
 				net.WriteUInt(amount, 8)
 			end
-			net.Send(v)
+			net.Send(k)
 		else
-			self.Users[v] = nil
+			self.Users[k] = nil
 		end
 	end
 end

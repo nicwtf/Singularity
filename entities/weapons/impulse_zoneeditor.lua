@@ -110,9 +110,9 @@ else
 		draw.SimpleText("STATE: "..(self.State or "Nothing selected"), "BudgetLabel", 100, 120)
 		draw.SimpleText("Warning, when you click your current position\nwill be registered, not your weapon aim position!", "BudgetLabel", 100, 140)
 
-		for v,k in pairs(impulse.Config.Zones) do
-			local cent = (LerpVector(.5, k.pos1, k.pos2)):ToScreen()
-			draw.SimpleText(k.name, "BudgetLabel", cent.x, cent.y, impulse.GetUniqueColour(k.name))
+		for _,v in pairs(impulse.Config.Zones) do
+			local cent = (LerpVector(.5, v.pos1, v.pos2)):ToScreen()
+			draw.SimpleText(v.name, "BudgetLabel", cent.x, cent.y, impulse.GetUniqueColour(v.name))
 		end
 	end
 

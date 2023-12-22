@@ -49,12 +49,12 @@ else
 		draw.SimpleText("STATE: "..(self.State or "Spawn a prop and select it..."), "BudgetLabel", 100, 120)
 
 		local count = 0
-		for v,k in pairs(ents.FindByClass("impulse_container")) do
-			if k.GetLoot and k:GetLoot() then
+		for _,v in pairs(ents.FindByClass("impulse_container")) do
+			if v.GetLoot and v:GetLoot() then
 				count = count + 1
 
-				local sPos = k:GetPos():ToScreen()
-				draw.SimpleText("Loot#"..k:EntIndex(), "ChatFont", sPos.x, sPos.y, Color(255, 0, 0), TEXT_ALIGN_CENTER)
+				local sPos = v:GetPos():ToScreen()
+				draw.SimpleText("Loot#"..v:EntIndex(), "ChatFont", sPos.x, sPos.y, Color(255, 0, 0), TEXT_ALIGN_CENTER)
 			end
 		end
 

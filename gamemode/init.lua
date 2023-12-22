@@ -27,9 +27,9 @@ RunConsoleCommand("sv_allowcslua", "0")
 
 if engine.ActiveGamemode() == "impulse" then
 	local gs = ""
-	for v,k in pairs(engine.GetGamemodes()) do
-		if k.name:find("impulse") and k.name != "impulse" then
-			gs = gs..k.name.."\n"
+	for _,v in pairs(engine.GetGamemodes()) do
+		if v.name:find("impulse") and v.name != "impulse" then
+			gs = gs..v.name.."\n"
 		end
 	end
 
