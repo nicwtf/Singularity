@@ -155,7 +155,7 @@ end
 function impulse.reloadPlugins()
 	local files, folders = file.Find("impulse/plugins/*", "LUA")
 
-    for v, plugin in ipairs(folders) do
+    for _, plugin in ipairs(folders) do
         MsgC( Color( 83, 143, 239 ), "[impulse] Loading plugin '"..plugin.."'\n" )
         impulse.Schema.LoadPlugin("impulse/plugins/"..plugin, plugin)
     end

@@ -148,13 +148,13 @@ function impulse.GetUniqueColour(hash)
 		return uColoursLive[hash]
 	end
 	
-	for v,k in RandomPairs(uColoursBase) do
-		if uColoursUsed[v] then
+	for k,v in RandomPairs(uColoursBase) do
+		if uColoursUsed[k] then
 			continue
 		end
 		
-		uColoursLive[hash] = k
-		uColoursUsed[v] = true
+		uColoursLive[hash] = v
+		uColoursUsed[k] = true
 	end
 
 	if not uColoursLive[hash] then

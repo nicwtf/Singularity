@@ -134,8 +134,8 @@ local function DrawDoorInfo(target, alpha)
 			ownedBy = "Owner:"
 		end
 
-		for v,k in pairs(doorOwners) do
-			local owner = Entity(k)
+		for _,v in pairs(doorOwners) do
+			local owner = Entity(v)
 
 			if IsValid(owner) and owner:IsPlayer() then
 				ownedBy = ownedBy.."\n"..owner:Name()
@@ -459,8 +459,8 @@ function GM:HUDPaint()
 			local ent = PlayerIcon.Entity
 
 			if IsValid(ent) then
-				for v,k in pairs(LocalPlayer():GetBodyGroups()) do
-					ent:SetBodygroup(k.id, LocalPlayer():GetBodygroup(k.id))
+				for k,v in pairs(LocalPlayer():GetBodyGroups()) do
+					ent:SetBodygroup(v.id, LocalPlayer():GetBodygroup(v.id))
 				end
 			end
 		end)
@@ -472,8 +472,8 @@ function GM:HUDPaint()
 		local curBodygroups = lp:GetBodyGroups()
 		local ent = PlayerIcon.Entity
 
-		for v,k in pairs(lastBodygroups) do
-			if not curBodygroups[v] or ent:GetBodygroup(k.id) != LocalPlayer():GetBodygroup(curBodygroups[v].id) then
+		for k,v in pairs(lastBodygroups) do
+			if not curBodygroups[k] or ent:GetBodygroup(v.id) != LocalPlayer():GetBodygroup(curBodygroups[k].id) then
 				bodygroupChange = true
 				break
 			end
@@ -500,8 +500,8 @@ function GM:HUDPaint()
 			local ent = PlayerIcon.Entity
 
 			if IsValid(ent) then
-				for v,k in pairs(LocalPlayer():GetBodyGroups()) do
-					ent:SetBodygroup(k.id, LocalPlayer():GetBodygroup(k.id))
+				for _,v in pairs(LocalPlayer():GetBodyGroups()) do
+					ent:SetBodygroup(v.id, LocalPlayer():GetBodygroup(v.id))
 				end
 			end
 		end)
@@ -546,13 +546,13 @@ function GM:HUDPaint()
 			local y = (scrH / 2) - 40
 
 			if syncData then
-				for v,k in pairs(syncData) do
-					if type(k) == "table" then
-						k = table.ToString(k)
+				for k,v in pairs(syncData) do
+					if type(v) == "table" then
+						v = table.ToString(v)
 					end
 
 					surface.SetTextPos((scrW / 2) + 30, y)
-					surface.DrawText("syncvalue: "..v.." ; "..tostring(k))
+					surface.DrawText("syncvalue: "..k.." ; "..tostring(v))
 					y = y + 20
 				end
 			end
@@ -562,9 +562,9 @@ function GM:HUDPaint()
 			end
 
 			if netData then
-				for v,k in pairs(netData) do
+				for k,v in pairs(netData) do
 					surface.SetTextPos((scrW / 2) + 30, y)
-					surface.DrawText("netvalue: "..v.." ; "..tostring(k))
+					surface.DrawText("netvalue: "..k.." ; "..tostring(v))
 					y = y + 20
 				end
 			end

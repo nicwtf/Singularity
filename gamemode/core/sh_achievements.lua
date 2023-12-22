@@ -87,7 +87,7 @@ if SERVER then
 
 		local val = 0
 
-		for v,k in pairs(self.impulseData.Achievements) do
+		for _,_ in pairs(self.impulseData.Achievements) do
 			val = val + 60
 		end
 

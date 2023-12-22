@@ -50,20 +50,20 @@ end
 -- @realm client
 -- @internal
 function impulse.LoadSettings()
-	for v,k in pairs(impulse.Settings) do
-		if k.type == "tickbox" or k.type == "slider" or k.type == "plainint" then
-			local def = k.default
-			if k.type == "tickbox" then 
-				def = tonumber(k.default) 
+	for k,v in pairs(impulse.Settings) do
+		if v.type == "tickbox" or v.type == "slider" or v.type == "plainint" then
+			local def = v.default
+			if v.type == "tickbox" then 
+				def = tonumber(v.default) 
 			end
 
-			k.value = cookie.GetNumber("impulse-setting-"..v, def) -- Cache the data into a variable instead of sql so its fast
-		elseif k.type == "dropdown" or k.type == "textbox" then
-			k.value = cookie.GetString("impulse-setting-"..v, k.default)
+			v.value = cookie.GetNumber("impulse-setting-"..k, def) -- Cache the data into a variable instead of sql so its fast
+		elseif v.type == "dropdown" or v.type == "textbox" then
+			v.value = cookie.GetString("impulse-setting-"..k, v.default)
 		end
 
-		if k.onChanged then
-			k.onChanged(k.value)
+		if v.onChanged then
+			v.onChanged(v.value)
 		end
 	end
 end
@@ -130,8 +130,8 @@ concommand.Add("impulse_reloadadvsettings", function()
 end)
 
 concommand.Add("impulse_resetsettings", function()
-	for v,k in pairs(impulse.Settings) do
-		impulse.SetSetting(v, k.default)
+	for k,v in pairs(impulse.Settings) do
+		impulse.SetSetting(k, v.default)
 	end
 	print("[impulse] Settings reset!")
 end)

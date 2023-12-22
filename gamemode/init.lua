@@ -5,7 +5,8 @@ DeriveGamemode("sandbox")
 MsgC(Color(83, 143, 239), '[impulse] Starting boot sequence...')
 
 print('\n\n\nCopyright (c) 2021 2i games (www.2i.games)')
-print('No permission is granted to USE, REPRODUCE, EDIT or SELL this software.\n\n\n')
+-- print('No permission is granted to USE, REPRODUCE, EDIT or SELL this software.\n\n\n')
+-- lies lol
 
 MsgC( Color( 83, 143, 239 ), "[impulse] Starting server load...\n" )
 impulse = impulse or {} -- defining global function table
