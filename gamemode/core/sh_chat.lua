@@ -59,8 +59,8 @@ local oocCommand = {
 			return ply:Notify("You have ran out of OOC messages. Wait "..string.NiceTime(timeLeft).." for more.")
 		end
 
-		for v,k in pairs(player.GetAll()) do
-			k:SendChatClassMessage(2, rawText, ply)
+		for _,v in pairs(player.GetAll()) do
+			v:SendChatClassMessage(2, rawText, ply)
 		end
 
 		ply.OOCLimit = ply.OOCLimit - 1
@@ -85,9 +85,9 @@ local loocCommand = {
 			return ply:Notify("You have an active OOC timeout that will remain for "..string.NiceTime(ply.hasOOCTimeout - CurTime())..".")
 		end
 
-		for v,k in pairs(player.GetAll()) do
-			if (ply:GetPos() - k:GetPos()):LengthSqr() <= (impulse.Config.TalkDistance ^ 2) then 
-				k:SendChatClassMessage(3, rawText, ply)
+		for _,v in pairs(player.GetAll()) do
+			if (ply:GetPos() - v:GetPos()):LengthSqr() <= (impulse.Config.TalkDistance ^ 2) then 
+				v:SendChatClassMessage(3, rawText, ply)
 			end
 		end
 
@@ -159,9 +159,9 @@ local yellCommand = {
 	onRun = function(ply, arg, rawText)
 		rawText = hook.Run("ChatClassMessageSend", 6, rawText, ply) or rawText
 
-		for v,k in pairs(player.GetAll()) do
-			if (ply:GetPos() - k:GetPos()):LengthSqr() <= (impulse.Config.YellDistance ^ 2) then 
-				k:SendChatClassMessage(6, rawText, ply)
+		for _,v in pairs(player.GetAll()) do
+			if (ply:GetPos() - v:GetPos()):LengthSqr() <= (impulse.Config.YellDistance ^ 2) then 
+				v:SendChatClassMessage(6, rawText, ply)
 			end
 		end
 	end
@@ -176,9 +176,9 @@ local whisperCommand = {
 	onRun = function(ply, arg, rawText)
 		rawText = hook.Run("ChatClassMessageSend", 7, rawText, ply) or rawText
 
-		for v,k in pairs(player.GetAll()) do
-			if (ply:GetPos() - k:GetPos()):LengthSqr() <= (impulse.Config.WhisperDistance ^ 2) then 
-				k:SendChatClassMessage(7, rawText, ply)
+		for _,v in pairs(player.GetAll()) do
+			if (ply:GetPos() - v:GetPos()):LengthSqr() <= (impulse.Config.WhisperDistance ^ 2) then 
+				v:SendChatClassMessage(7, rawText, ply)
 			end
 		end
 	end
@@ -194,9 +194,9 @@ local radioCommand = {
 		rawText = hook.Run("ChatClassMessageSend", 8, rawText, ply) or rawText
 
 		if ply:IsCP() then
-			for v,k in pairs(player.GetAll()) do
-				if k:IsCP() then 
-					k:SendChatClassMessage(8, rawText, ply)
+			for _,v in pairs(player.GetAll()) do
+				if v:IsCP() then 
+					v:SendChatClassMessage(8, rawText, ply)
 				end
 			end
 		else
@@ -213,9 +213,9 @@ local meCommand = {
 	requiresArg = true,
 	requiresAlive = true,
 	onRun = function(ply, arg, rawText)
-		for v,k in pairs(player.GetAll()) do
-			if (ply:GetPos() - k:GetPos()):LengthSqr() <= (impulse.Config.TalkDistance ^ 2) then 
-				k:SendChatClassMessage(9, rawText, ply)
+		for _,v in pairs(player.GetAll()) do
+			if (ply:GetPos() - v:GetPos()):LengthSqr() <= (impulse.Config.TalkDistance ^ 2) then 
+				v:SendChatClassMessage(9, rawText, ply)
 			end
 		end
 	end
@@ -228,9 +228,9 @@ local itCommand = {
 	requiresArg = true,
 	requiresAlive = true,
 	onRun = function(ply, arg, rawText)
-		for v,k in pairs(player.GetAll()) do
-			if (ply:GetPos() - k:GetPos()):LengthSqr() <= (impulse.Config.TalkDistance ^ 2) then 
-				k:SendChatClassMessage(10, rawText, ply)
+		for _,v in pairs(player.GetAll()) do
+			if (ply:GetPos() - v:GetPos()):LengthSqr() <= (impulse.Config.TalkDistance ^ 2) then 
+				v:SendChatClassMessage(10, rawText, ply)
 			end
 		end
 	end
@@ -254,8 +254,8 @@ local advertCommand = {
 
 		timer.Simple(15, function()
 			if IsValid(ply) and ply:IsPlayer() then
-				for v,k in pairs(player.GetAll()) do
-					k:SendChatClassMessage(12, rawText, ply)
+				for _,v in pairs(player.GetAll()) do
+					v:SendChatClassMessage(12, rawText, ply)
 				end
 			end
 		end)
@@ -272,9 +272,9 @@ local rollCommand = {
 	onRun = function(ply, arg, rawText)
 		local rollResult = (tostring(math.random(1,100)))
 
-		for v,k in pairs(player.GetAll()) do
-			if (ply:GetPos() - k:GetPos()):LengthSqr() <= (impulse.Config.TalkDistance ^ 2) then 
-				k:SendChatClassMessage(11, rollResult, ply)
+		for _,v in pairs(player.GetAll()) do
+			if (ply:GetPos() - v:GetPos()):LengthSqr() <= (impulse.Config.TalkDistance ^ 2) then 
+				v:SendChatClassMessage(11, rollResult, ply)
 			end
 		end
 	end
@@ -308,9 +308,9 @@ local dropMoneyCommand = {
 				note.DropKey = ply.DroppedMoneyCA
 
 				if ply.DroppedMoneyC == impulse.Config.DroppedMoneyLimit then
-					for v,k in pairs(ply.DroppedMoney) do
-						if k and IsValid(k) then
-							k:Remove()
+					for _,v in pairs(ply.DroppedMoney) do
+						if v and IsValid(v) then
+							v:Remove()
 							break
 						end
 					end
@@ -405,8 +405,8 @@ local searchCommand = {
 			net.Start("impulseInvDoSearch")
 			net.WriteUInt(targ:EntIndex(), 8)
 			net.WriteUInt(table.Count(inv), 16)
-			for v,k in pairs(inv) do
-				local netid = impulse.Inventory.ClassToNetID(k.class)
+			for _,v in pairs(inv) do
+				local netid = impulse.Inventory.ClassToNetID(v.class)
 				net.WriteUInt(netid, 10)
 			end
 			net.Send(ply)
@@ -427,8 +427,8 @@ local eventCommand = {
 			return
 		end
 		
-		for v,k in pairs(player.GetAll()) do
-			k:SendChatClassMessage(14, rawText, ply)
+		for _,v in pairs(player.GetAll()) do
+			v:SendChatClassMessage(14, rawText, ply)
 		end
 	end
 }
@@ -453,9 +453,9 @@ local groupChatCommand = {
 			return ply:Notify("Your group rank does not have permission to do this.")
 		end
 
-		for v,k in pairs(player.GetAll()) do
-			if k:GetSyncVar(SYNC_GROUP_NAME, "") == group and not k:IsCP() then
-				k:SendChatClassMessage(15, rawText, ply)
+		for _,v in pairs(player.GetAll()) do
+			if v:GetSyncVar(SYNC_GROUP_NAME, "") == group and not v:IsCP() then
+				v:SendChatClassMessage(15, rawText, ply)
 			end
 		end
 	end

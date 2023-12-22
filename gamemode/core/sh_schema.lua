@@ -66,7 +66,7 @@ function impulse.Schema.Boot()
     impulse.lib.includeDir(SCHEMA_NAME.."/schema/scripts/hooks", true, "SCHEMA", name)
     local files, plugins = file.Find(SCHEMA_NAME.."/plugins/*", "LUA")
 
-    for v, dir in ipairs(plugins) do
+    for _, dir in ipairs(plugins) do
         if impulse.Config.DisabledPlugins and impulse.Config.DisabledPlugins[dir] then
             continue
         end
@@ -217,11 +217,11 @@ function impulse.Schema.LoadHooks(file, variable, uid)
 
     local c = 0
 
-    for v,k in pairs(PLUGIN) do
-        if type(k) == "function" then
+    for k,v in pairs(PLUGIN) do
+        if type(v) == "function" then
             c = c + 1
-            hook.Add(v, "impulse"..uid..c, function(...)
-                return k(nil, ...)
+            hook.Add(k, "impulse"..uid..c, function(...)
+                return v(nil, ...)
             end)
         end
     end

@@ -4,27 +4,27 @@ file.CreateDir("impulse/saves")
 function LoadSaveEnts()
 	if file.Exists( "impulse/saves/"..string.lower(game.GetMap())..".dat", "DATA") then
 		local savedEnts = util.JSONToTable( file.Read( "impulse/saves/" .. string.lower( game.GetMap() ) .. ".dat" ) )
-		for v,k in pairs(savedEnts) do
-			local x = ents.Create(k.class)
+		for _,v in pairs(savedEnts) do
+			local x = ents.Create(v.class)
 
 			if not IsValid(x) then
-				print("[impulse] [save] Entity "..k.class.." does not exist! Skipping!")
+				print("[impulse] [save] Entity "..v.class.." does not exist! Skipping!")
 				continue
 			end
 
-			x:SetPos(k.pos)
-			x:SetAngles(k.angle)
+			x:SetPos(v.pos)
+			x:SetAngles(v.angle)
 			
-			if k.class == "prop_physics" or k.class == "prop_dynamic" or k.class == "impulse_hl2rp_scavengable" then
-				x:SetModel(k.model)
+			if v.class == "prop_physics" or v.class == "prop_dynamic" or v.class == "impulse_hl2rp_scavengable" then
+				x:SetModel(v.model)
 			end
 			x.impulseSaveEnt = true
 
-			if k.keyvalue then
-				x.impulseSaveKeyValue = k.keyvalue
+			if v.keyvalue then
+				x.impulseSaveKeyValue = v.keyvalue
 
-				if k.keyvalue["nopos"] then
-					x.AlwaysPos = k.pos
+				if v.keyvalue["nopos"] then
+					x.AlwaysPos = v.pos
 				end
 			end
 
@@ -47,9 +47,9 @@ concommand.Add("impulse_save_saveall", function(ply, cmd, args)
 
 	local savedEnts = {}
 
-	for v,k in pairs(ents.GetAll()) do
-		if k.impulseSaveEnt then
-			table.insert(savedEnts, {pos =  k.AlwaysPos or k:GetPos(), angle = k:GetAngles(), class = k:GetClass(), model = k:GetModel(), keyvalue = (k.impulseSaveKeyValue or nil)})
+	for _,v in pairs(ents.GetAll()) do
+		if v.impulseSaveEnt then
+			table.insert(savedEnts, {pos =  v.AlwaysPos or v:GetPos(), angle = v:GetAngles(), class = v:GetClass(), model = v:GetModel(), keyvalue = (v.impulseSaveKeyValue or nil)})
 		end
 	end
 
@@ -60,9 +60,9 @@ end)
 
 concommand.Add("impulse_save_reload", function(ply)
 	if not ply:IsSuperAdmin() then return end
-	for v,k in pairs(ents.GetAll()) do
-		if k.impulseSaveEnt then
-			k:Remove()
+	for _,v in pairs(ents.GetAll()) do
+		if v.impulseSaveEnt then
+			v:Remove()
 		end
 	end
 

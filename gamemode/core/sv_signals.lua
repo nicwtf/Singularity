@@ -62,7 +62,7 @@ if db then
 
 	timer.Create("impulseSignalsThink", impulse.Config.SignalsUpdateTime or 5, 0, function()
 		impulse.Signals.ReadAll(function(data)
-			for v,k in pairs(data) do
+			for _,_ in pairs(data) do
 				if impulse.Signals.Hooks[data.class] then
 					impulse.Signals.Hooks[data.class](pon.decode(data.data))
 				end

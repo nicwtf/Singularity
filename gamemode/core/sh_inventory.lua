@@ -67,8 +67,8 @@ function impulse.RegisterItem(item)
 
 			local weps = ply:GetWeapons()
 
-			for v,k in pairs(weps) do
-				if IsValid(k) and k.IsLongsword and k.Attachments and k.Attachments[attClass] then
+			for _,v in pairs(weps) do
+				if IsValid(v) and v.IsLongsword and v.Attachments and v.Attachments[attClass] then
 					return true
 				end
 			end
@@ -87,10 +87,10 @@ function impulse.RegisterItem(item)
 		function item:UnEquip(ply, itemclass, uid)
 			local weps = ply:GetWeapons()
 
-			for v,k in pairs(weps) do
-				if IsValid(k) and k.IsLongsword and k.Attachments and k.Attachments[attClass] and k:HasAttachment(attClass) then
-					k:TakeAttachment(attClass)
-					ply.InvAttachments[k:GetClass()] = nil
+			for _,v in pairs(weps) do
+				if IsValid(v) and v.IsLongsword and v.Attachments and v.Attachments[attClass] and v:HasAttachment(attClass) then
+					v:TakeAttachment(attClass)
+					ply.InvAttachments[v:GetClass()] = nil
 					return
 				end
 			end
@@ -159,10 +159,10 @@ function impulse.Inventory.GetCraftingTime(mix)
 	local time = 0
 	local sounds = {}
 
-	for v,k in pairs(items) do
-		local hasCustom = impulse.Inventory.CraftInfo[v]
+	for k,v in pairs(items) do
+		local hasCustom = impulse.Inventory.CraftInfo[k]
 
-		for i=1, k.take do
+		for i=1, v.take do
 			if hasCustom and hasCustom.sound then
 				table.insert(sounds, {time, hasCustom.sound})
 			else
@@ -237,8 +237,8 @@ if CLIENT then
 		local has = false
 		local count
 
-		for v,k in pairs(inv) do
-			if k.id == id then
+		for _,v in pairs(inv) do
+			if v.id == id then
 				has = true
 				count = (count or 0) + 1
 			end

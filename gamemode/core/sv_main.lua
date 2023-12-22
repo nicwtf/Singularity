@@ -105,8 +105,8 @@ function meta:ResetSubMaterials()
         return
     end
     
-    for v,k in pairs(self.SetSubMats) do
-        self:SetSubMaterial(v - 1, nil)
+    for k,_ in pairs(self.SetSubMats) do
+        self:SetSubMaterial(k - 1, nil)
     end
 
     self.SetSubMats = nil

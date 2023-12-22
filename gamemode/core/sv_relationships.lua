@@ -23,11 +23,11 @@ end
 
 function impulse.Relationships.SyncNPC(npc)
 	if player.GetCount() > 1 then
-		for v,k in pairs(impulse.Relationships.Players) do
-			if IsValid(k) then
-				npc:AddEntityRelationship(k, D_HT, 99)
+		for k,v in pairs(impulse.Relationships.Players) do
+			if IsValid(v) then
+				npc:AddEntityRelationship(v, D_HT, 99)
 			else
-				impulse.Relationships.Players[v] = nil
+				impulse.Relationships.Players[k] = nil
 			end
 		end
 	end

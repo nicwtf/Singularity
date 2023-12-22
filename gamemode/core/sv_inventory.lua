@@ -65,11 +65,11 @@ function impulse.Inventory.DBUpdateStoreType(ownerid, class, limit, oldStorageTy
 	queryGet:Limit(limit or 1)
 	queryGet:Callback(function(result) -- workaround because limit doesnt work for update queries
 		if type(result) == "table" and #result > 0 then
-			for v,k in pairs(result) do
+			for _,v in pairs(result) do
 				local query = mysql:Update("impulse_inventory")
 				query:Update("storagetype", newStorageType)
-				query:Where("id", k.id)
-				query:Where("storagetype", k.storagetype)
+				query:Where("id", v.id)
+				query:Where("storagetype", v.storagetype)
 				query:Execute()
 			end
 		end
@@ -234,12 +234,12 @@ function meta:HasIllegalInventoryItem(storetype)
 	local storetype = storetype or 1
 	local inv = self:GetInventory(storetype)
 
-	for v,k in pairs(inv) do
-		local itemclass = impulse.Inventory.ClassToNetID(k.class)
+	for k,v in pairs(inv) do
+		local itemclass = impulse.Inventory.ClassToNetID(v.class)
 		local item = impulse.Inventory.Items[itemclass]
 
-		if not k.restricted and item.Illegal then
-			return true, v
+		if not v.restricted and item.Illegal then
+			return true, k
 		end
 	end
 
@@ -392,8 +392,8 @@ function meta:ClearInventory(storetype)
 
 	local inv = self:GetInventory(storetype)
 
-	for v,k in pairs(inv) do
-		self:TakeInventoryItem(v, storetype, true)
+	for k,_ in pairs(inv) do
+		self:TakeInventoryItem(k, storetype, true)
 	end
 
 	impulse.Inventory.DBClearInventory(self.impulseID, storetype)
@@ -412,9 +412,9 @@ function meta:ClearRestrictedInventory(storetype)
 
 	local inv = self:GetInventory(storetype)
 
-	for v,k in pairs(inv) do
-		if k.restricted then
-			self:TakeInventoryItem(v, storetype, true)
+	for k,v in pairs(inv) do
+		if v.restricted then
+			self:TakeInventoryItem(k, storetype, true)
 		end
 	end
 
@@ -432,11 +432,11 @@ function meta:ClearIllegalInventory(storetype)
 
 	local inv = self:GetInventory(storetype)
 
-	for v,k in pairs(inv) do
-		local itemData = impulse.Inventory.Items[k.id]
+	for k,v in pairs(inv) do
+		local itemData = impulse.Inventory.Items[v.id]
 
 		if itemData and itemData.Illegal then
-			self:TakeInventoryItem(v)
+			self:TakeInventoryItem(k)
 		end
 	end
 end
@@ -454,10 +454,10 @@ function meta:TakeInventoryItemClass(itemclass, storetype, amount)
 	local impulseid = self.impulseID
 
 	local count = 0
-	for v,k in pairs(impulse.Inventory.Data[impulseid][storetype]) do
-		if k.class == itemclass then
+	for k,v in pairs(impulse.Inventory.Data[impulseid][storetype]) do
+		if v.class == itemclass then
 			count = count + 1
-			self:TakeInventoryItem(v, storetype)
+			self:TakeInventoryItem(k, storetype)
 
 			if count == amount then
 				return
@@ -530,9 +530,9 @@ function meta:UnEquipInventory()
 
 	local inv = self:GetInventory(1)
 
-	for v,k in pairs(inv) do
-		if k.equipped then
-			self:SetInventoryItemEquipped(v, false)
+	for k,v in pairs(inv) do
+		if v.equipped then
+			self:SetInventoryItemEquipped(k, false)
 		end
 	end
 end
@@ -565,9 +565,9 @@ function meta:DropInventoryItem(itemid)
 	self.DroppedItemsCA = (self.DroppedItemsCA and self.DroppedItemsCA + 1) or 1
 
 	if self.DroppedItemsC >= impulse.Config.DroppedItemsLimit then
-		for v,k in pairs(self.DroppedItems) do
-			if k and IsValid(k) and k.ItemOwner and k.ItemOwner == self then
-				k:Remove()
+		for _,v in pairs(self.DroppedItems) do
+			if v and IsValid(v) and v.ItemOwner and v.ItemOwner == self then
+				v:Remove()
 				break
 			end
 		end
@@ -653,15 +653,15 @@ function meta:MoveInventoryItemMass(itemclass, from, to, amount)
 	impulse.Inventory.DBUpdateStoreType(self.impulseID, itemclass, amount, from, to)
 
 	local takes = 0
-	for v,k in pairs(self:GetInventory(from)) do
-		if not k.restricted and k.class == itemclass then
+	for k,v in pairs(self:GetInventory(from)) do
+		if not v.restricted and v.class == itemclass then
 			takes = takes + 1
 
-			local itemclip = self:TakeInventoryItem(v, from, true)
+			local itemclip = self:TakeInventoryItem(k, from, true)
 			local newinvid = self:GiveInventoryItem(itemclass, to, false, nil, true, (itemclip or nil))
 
 			net.Start("impulseInvMove")
-			net.WriteUInt(v, 16)
+			net.WriteUInt(k, 16)
 			net.WriteUInt(newinvid, 16)
 			net.WriteUInt(from, 4)
 			net.WriteUInt(to, 4)
@@ -685,8 +685,8 @@ function meta:CanMakeMix(mixClass)
 		return false
 	end
 
-	for v,k in pairs(mixClass.Input) do
-		local item = self:HasInventoryItem(v, k.take)
+	for k,v in pairs(mixClass.Input) do
+		local item = self:HasInventoryItem(k, v.take)
 
 		if not item or self:IsInventoryItemRestricted(item) then
 			return false

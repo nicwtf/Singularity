@@ -163,8 +163,8 @@ ioRegister[CLIENT][SYNC_MINITABLE] = function(val) return pon.decode(net.ReadDat
 ioRegister[SERVER][SYNC_INTSTACK] = function(val) 
 	local count = net.WriteUInt(#val, 8)
 
-	for v,k in pairs(val) do
-		net.WriteUInt(k, 8)
+	for _,v in pairs(val) do
+		net.WriteUInt(v, 8)
 	end
 
 	return

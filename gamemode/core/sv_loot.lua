@@ -7,11 +7,11 @@ function impulse.Loot.GenerateFromPool(pool)
 	local rarityCount = 0
 	local loot = {}
 
-	for v,k in RandomPairs(lootPool.Items) do
-		for i=1, (k.Rep or 1) do
+	for k,v in RandomPairs(lootPool.Items) do
+		for i=1, (v.Rep or 1) do
 			local rGen = math.random(1, 1000)
 
-			if rGen >= k.Rarity then
+			if rGen >= v.Rarity then
 				if lootPool.MaxItems and count >= lootPool.MaxItems then
 					break
 				end
@@ -21,9 +21,9 @@ function impulse.Loot.GenerateFromPool(pool)
 				end
 
 				count = count + 1
-				rarityCount = rarityCount + k.Rarity
+				rarityCount = rarityCount + v.Rarity
 
-				loot[v] = (loot[v] and loot[v] + 1) or 1
+				loot[k] = (loot[k] and loot[k] + 1) or 1
 			end
 		end
 	end

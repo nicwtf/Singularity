@@ -9,14 +9,14 @@ file.CreateDir("impulse/doors")
 function impulse.Doors.Save()
 	local doors = {}
 
-	for v,k in pairs(ents.GetAll()) do
-		if k:IsDoor() and k:CreatedByMap() then
-			if k:GetSyncVar(SYNC_DOOR_BUYABLE, true) == false then
-				doors[k:MapCreationID()] = {
-					name = k:GetSyncVar(SYNC_DOOR_NAME, nil),
-					group = k:GetSyncVar(SYNC_DOOR_GROUP, nil),
-					pos = k:GetPos(),
-					buyable = k:GetSyncVar(SYNC_DOOR_BUYABLE, false)
+	for _,v in pairs(ents.GetAll()) do
+		if v:IsDoor() and v:CreatedByMap() then
+			if v:GetSyncVar(SYNC_DOOR_BUYABLE, true) == false then
+				doors[v:MapCreationID()] = {
+					name = v:GetSyncVar(SYNC_DOOR_NAME, nil),
+					group = v:GetSyncVar(SYNC_DOOR_GROUP, nil),
+					pos = v:GetPos(),
+					buyable = v:GetSyncVar(SYNC_DOOR_BUYABLE, false)
 				}
 			end
 		end
@@ -44,12 +44,12 @@ function impulse.Doors.Load()
 		end
 
 		-- try to find every door via the pos value (update safeish)
-		for v,k in pairs(ents.GetAll()) do
-			local p = k.GetPos(k)
+		for _,v in pairs(ents.GetAll()) do
+			local p = v.GetPos(v)
 			local found = posBuffer[p.x.."|"..p.y.."|"..p.z]
 
-			if found and k:IsDoor() then
-				local doorEnt = k
+			if found and v:IsDoor() then
+				local doorEnt = v
 				local doorData = mapDoorData[found]
 				local doorIndex = doorEnt:EntIndex()
 				posFinds[doorIndex] = true
@@ -120,8 +120,8 @@ function meta:RemoveDoorMaster(door, noUnlock)
 	door:SetSyncVar(SYNC_DOOR_OWNERS, nil, true)
 	door.MasterUser = nil
 
-	for v,k in pairs(owners) do
-		local owner = Entity(k)
+	for _,v in pairs(owners) do
+		local owner = Entity(v)
 
 		if IsValid(owner) and owner:IsPlayer() then
 			owner.OwnedDoors[door] = nil

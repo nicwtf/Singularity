@@ -7,8 +7,8 @@ util.AddNetworkString("impulseSendJailInfo")
 
 function meta:Arrest()
 	self.ArrestedWeapons = {}
-	for v,k in pairs(self:GetWeapons()) do
-		self.ArrestedWeapons[k:GetClass()] = true
+	for _,v in pairs(self:GetWeapons()) do
+		self.ArrestedWeapons[v:GetClass()] = true
 	end
 
 	self:StripWeapons()
@@ -24,8 +24,8 @@ function meta:UnArrest()
 	self:SetSyncVar(SYNC_ARRESTED, false, true)
 
 	if self.ArrestedWeapons then
-		for v,k in pairs(self.ArrestedWeapons) do
-			local w = self:Give(v)
+		for k,_ in pairs(self.ArrestedWeapons) do
+			local w = self:Give(k)
 			w:SetClip1(0)
 		end
 
@@ -92,18 +92,18 @@ function meta:Jail(time, jailData)
 		self:Arrest()
 	end
 
-	for v,k in pairs(impulse.Config.PrisonCells) do
-		local cellData = impulse.Arrest.Prison[v]
+	for k,v in pairs(impulse.Config.PrisonCells) do
+		local cellData = impulse.Arrest.Prison[k]
 		
 		if cellData and not doCellMates then -- if something is assigned to this cell
 			continue
 		end
 
-		pos = k
-		cellID = v
+		pos = v
+		cellID = k
 
 		if doCellMates then
-			local cell = impulse.Arrest.Prison[v]
+			local cell = impulse.Arrest.Prison[k]
 			cell[self:EntIndex()] = {
 				inmate = self,
 				jailData = jailData,
@@ -113,8 +113,8 @@ function meta:Jail(time, jailData)
 
 			break
 		else
-			impulse.Arrest.Prison[v] = {}
-			impulse.Arrest.Prison[v][self:EntIndex()] = {
+			impulse.Arrest.Prison[k] = {}
+			impulse.Arrest.Prison[k][self:EntIndex()] = {
 				inmate = self,
 				jailData = jailData,
 				duration = time,

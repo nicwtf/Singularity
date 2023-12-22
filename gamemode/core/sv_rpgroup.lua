@@ -132,9 +132,9 @@ function impulse.Group.ComputeMembers(name, callback)
 		local membercount = 0
 
 		if type(result) == "table" and #result > 0 then
-			for v,k in pairs(result) do
+			for _,v in pairs(result) do
 				membercount = membercount + 1
-				members[k.steamid] = {Name = k.rpname, Rank = k.rpgrouprank or impulse.Group.GetDefaultRank(name)}
+				members[v.steamid] = {Name = v.rpname, Rank = vv.rpgrouprank or impulse.Group.GetDefaultRank(name)}
 			end
 		end
 
@@ -154,16 +154,16 @@ function impulse.Group.RankShift(name, from, to)
 
 	impulse.Group.DBPlayerRankShift(group.ID, from, to)
 
-	for v,k in pairs(group.Members) do
-		if k.Rank == from then
-			local ply = player.GetBySteamID(v)
+	for k,v in pairs(group.Members) do
+		if v.Rank == from then
+			local ply = player.GetBySteamID(k)
 
-			impulse.Group.Groups[name].Members[v].Rank = to
+			impulse.Group.Groups[name].Members[k].Rank = to
 
 			if IsValid(ply) then
 				ply:GroupAdd(name, to, true)
 			else
-				impulse.Group.NetworkMemberToOnline(name, v)
+				impulse.Group.NetworkMemberToOnline(name, k)
 			end
 		end
 	end
@@ -174,9 +174,9 @@ end
 function impulse.Group.GetDefaultRank(name)
 	local data = impulse.Group.Groups[name]
 
-	for v,k in pairs(data.Ranks) do
-		if k[0] then
-			return v
+	for k,v in pairs(data.Ranks) do
+		if v[0] then
+			return k
 		end
 	end
 
@@ -215,11 +215,11 @@ function impulse.Group.NetworkMetaDataToOnline(name)
 
 	local rf = RecipientFilter()
 
-	for v,k in pairs(player.GetAll()) do
-		local x = k:GetSyncVar(SYNC_GROUP_NAME, nil)
+	for _,v in pairs(player.GetAll()) do
+		local x = v:GetSyncVar(SYNC_GROUP_NAME, nil)
 
 		if x and x == name then
-			rf:AddPlayer(k)
+			rf:AddPlayer(v)
 		end
 	end
 
@@ -244,11 +244,11 @@ function impulse.Group.NetworkMemberToOnline(name, sid)
 
 	local rf = RecipientFilter()
 
-	for v,k in pairs(player.GetAll()) do
-		local x = k:GetSyncVar(SYNC_GROUP_NAME, nil)
+	for _,v in pairs(player.GetAll()) do
+		local x = v:GetSyncVar(SYNC_GROUP_NAME, nil)
 
 		if x and x == name then
-			rf:AddPlayer(k)
+			rf:AddPlayer(v)
 		end
 	end
 
@@ -262,11 +262,11 @@ end
 function impulse.Group.NetworkMemberRemoveToOnline(name, sid)
 	local rf = RecipientFilter()
 
-	for v,k in pairs(player.GetAll()) do
-		local x = k:GetSyncVar(SYNC_GROUP_NAME, nil)
+	for _,v in pairs(player.GetAll()) do
+		local x = v:GetSyncVar(SYNC_GROUP_NAME, nil)
 
 		if x and x == name then
-			rf:AddPlayer(k)
+			rf:AddPlayer(v)
 		end
 	end
 
@@ -278,8 +278,8 @@ end
 function impulse.Group.NetworkAllMembers(to, name)
 	local members = impulse.Group.Groups[name].Members
 
-	for v,k in pairs(members) do
-		impulse.Group.NetworkMember(to, name, v)
+	for k,_ in pairs(members) do
+		impulse.Group.NetworkMember(to, name, k)
 	end
 end
 
@@ -288,12 +288,12 @@ function impulse.Group.NetworkRanksToOnline(name)
 	local data = pon.encode(ranks)
 	local rf = RecipientFilter()
 
-	for v,k in pairs(player.GetAll()) do
-		local x = k:GetSyncVar(SYNC_GROUP_NAME, nil)
+	for _,v in pairs(player.GetAll()) do
+		local x = v:GetSyncVar(SYNC_GROUP_NAME, nil)
 
 		if x and x == name then
-			if k:GroupHasPermission(5) or k:GroupHasPermission(6) then
-				rf:AddPlayer(k)
+			if v:GroupHasPermission(5) or v:GroupHasPermission(6) then
+				rf:AddPlayer(v)
 			end
 		end
 	end
@@ -320,16 +320,16 @@ function impulse.Group.NetworkRankToOnline(name, rankName)
 	local data = pon.encode(rank)
 	local rf = RecipientFilter()
 
-	for v,k in pairs(player.GetAll()) do
-		local x = k:GetSyncVar(SYNC_GROUP_NAME, nil)
-		local r = k:GetSyncVar(SYNC_GROUP_RANK, nil)
+	for _,v in pairs(player.GetAll()) do
+		local x = v:GetSyncVar(SYNC_GROUP_NAME, nil)
+		local r = v:GetSyncVar(SYNC_GROUP_RANK, nil)
 
 		if x and x == name and r == rank then
-			if k:GroupHasPermission(5) or k:GroupHasPermission(6) then
+			if v:GroupHasPermission(5) or v:GroupHasPermission(6) then
 				continue
 			end
 
-			rf:AddPlayer(k)
+			rf:AddPlayer(v)
 		end
 	end
 

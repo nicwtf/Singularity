@@ -150,9 +150,9 @@ if SERVER then
 
 		local recipFilter = RecipientFilter()
 
-		for v,k in pairs(player.GetAll()) do
-			if k:GetPos():DistToSqr(pos) < range then
-				recipFilter:AddPlayer(k)
+		for _,v in pairs(player.GetAll()) do
+			if v:GetPos():DistToSqr(pos) < range then
+				recipFilter:AddPlayer(v)
 			end
 		end
 

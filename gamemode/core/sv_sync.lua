@@ -41,9 +41,9 @@ function entMeta:Sync(target)
 				local recipFilter = RecipientFilter()
 
 				if syncCondition then
-					for v,k in pairs(player.GetAll()) do
-						if syncCondition(k) then
-							recipFilter:AddPlayer(k)
+					for _,v in pairs(player.GetAll()) do
+						if syncCondition(v) then
+							recipFilter:AddPlayer(v)
 						end
 					end
 				else
@@ -112,9 +112,9 @@ function entMeta:SyncSingle(varID, target)
 			local recipFilter = RecipientFilter()
 
 			if syncCondition then
-				for v,k in pairs(player.GetAll()) do
-					if syncCondition(k) then
-						recipFilter:AddPlayer(k)
+				for _,v in pairs(player.GetAll()) do
+					if syncCondition(v) then
+						recipFilter:AddPlayer(v)
 					end
 				end
 			else

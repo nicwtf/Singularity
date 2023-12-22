@@ -148,9 +148,9 @@ function meta:Notify(message)
                 notice:AlphaTo(0, 1, 0, function() 
                     notice:Remove()
 
-                    for v,k in pairs(impulse.notices) do
-                        if k == notice then
-                            table.remove(impulse.notices, v)
+                    for k,v in pairs(impulse.notices) do
+                        if v == notice then
+                            table.remove(impulse.notices, k)
                         end
                     end
 
