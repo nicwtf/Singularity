@@ -13,7 +13,7 @@ function impulse.Schema.Boot()
     SCHEMA_NAME = name
     MsgC(Color( 83, 143, 239 ), "[impulse] Loading '"..SCHEMA_NAME.."' schema...\n")
 
-    if SERVER and not file.IsDir(SCHEMA_NAME, "LUA") then
+    if SERVER and not file.Exists(SCHEMA_NAME, "LUA") then
         SetGlobalString("impulse_fatalerror", "Failed to load Schema '"..name.."', does not exist.")
     end
 

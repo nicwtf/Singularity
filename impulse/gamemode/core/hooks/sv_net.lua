@@ -129,6 +129,8 @@ net.Receive("impulseCharacterCreate", function(len, ply)
 		insertQuery:Insert("rpname", charName)
 		insertQuery:Insert("steamid", plyID)
 		insertQuery:Insert("group", "user")
+		insertQuery:Insert("rpgroup", 0)
+        insertQuery:Insert("rpgrouprank", "")
 		insertQuery:Insert("xp", 0)
 		insertQuery:Insert("money", impulse.Config.StartingMoney)
 		insertQuery:Insert("bankmoney", impulse.Config.StartingBankMoney)
@@ -144,6 +146,8 @@ net.Receive("impulseCharacterCreate", function(len, ply)
 					rpname = charName,
 					steamid = plyID,
 					group = "user",
+					rpgroup = nil,
+					rpgrouprank = "",
 					xp = 0,
 					money = impulse.Config.StartingMoney,
 					bankmoney = impulse.Config.StartingBankMoney,
@@ -1098,7 +1102,7 @@ net.Receive("impulseMixTry", function(len, ply)
 		return
 	end
 
-	local oWeight = impulse.Inventory.ItemsQW[output]
+	local oWeight = impulse.Inventory.ItemsQW[output] * (mixClass.OutputAmount or 1)
 
 	for v,k in pairs(mixClass.Input) do
 		local iWeight = impulse.Inventory.ItemsQW[v]
@@ -1164,9 +1168,19 @@ net.Receive("impulseMixTry", function(len, ply)
 			for v,k in pairs(mixClass.Input) do
 				ply:TakeInventoryItemClass(v, nil, k.take)
 			end
+					
+			local amount = mixClass.OutputAmount or 1
 
-			ply:GiveInventoryItem(mixClass.Output)
-			ply:Notify("You have crafted a "..item.Name..".")
+			for i=1, amount do
+				ply:GiveInventoryItem(mixClass.Output)		
+			end
+			
+			if amount > 1 then
+				ply:Notify("You have crafted "..mixClass.OutputAmount.." "..item.Name.."s.")		
+			else
+				ply:Notify("You have crafted a "..item.Name..".")		
+			end
+			
 
 			local xp = 28 + ((math.Clamp(mixClass.Level, 2, 9)  * 1.8) * 2) -- needs balancing
 
