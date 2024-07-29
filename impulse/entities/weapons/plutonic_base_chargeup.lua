@@ -1,5 +1,3 @@
--- "addons\\plutonic\\lua\\weapons\\plutonic_base_chargeup.lua"
--- Retrieved by https://github.com/lewisclark/glua-steal
 AddCSLuaFile()
 
 SWEP.Base = "plutonic_base"

@@ -1,12 +1,10 @@
--- "addons\\plutonic\\lua\\weapons\\plutonic_base\\shared\\worldmodel.lua"
--- Retrieved by https://github.com/lewisclark/glua-steal
 function SWEP:DrawWorldModel()
 	if self.ExtraDrawWorldModel then
 		self.ExtraDrawWorldModel(self)
 	else
 		self:DrawModel()
 	end
-
+	--[[
 	local attachment = self:GetCurAttachment()
 
 	if not self.Attachments or not self.Attachments[attachment] or not self.Attachments[attachment].Cosmetic then
@@ -50,18 +48,19 @@ function SWEP:DrawWorldModel()
 	ang:RotateAroundAxis(ang:Forward(), w.Ang.r)
 	att:SetAngles(ang)
 	att:DrawModel()
+	[[]]
 end
 
-hook.Add("PostPlayerDraw", "PlutonicDrawWorldAttachment", function()
-	local wep = LocalPlayer():GetActiveWeapon()
-
-	if not IsValid(wep) then
-		return
+hook.Add(
+	"PostPlayerDraw",
+	"PlutonicDrawWorldAttachment",
+	function()
+		local wep = LocalPlayer():GetActiveWeapon()
+		if not IsValid(wep) then return end
+		if IsValid(wep.worldAttachment) then
+			wep.worldAttachment:DrawModel()
+			wep.worldAttachment:SetRenderOrigin()
+			wep.worldAttachment:SetRenderAngles()
+		end
 	end
-
-	if IsValid(wep.worldAttachment) then
-		wep.worldAttachment:DrawModel()
-		wep.worldAttachment:SetRenderOrigin()
-		wep.worldAttachment:SetRenderAngles()
-	end
-end)
+)

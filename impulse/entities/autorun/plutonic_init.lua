@@ -1,18 +1,25 @@
+--- The core level functionality of Plutonic.
+-- @module Framework
+
 AddCSLuaFile()
 
-Plutonic = Plutonic or {} --- Creates the Plutonic table if it doesn't exist.
-Plutonic.Enum = Plutonic.Enum or {} --- Creates the Plutonic Enum table if it doesn't exist.
-Plutonic.Framework = Plutonic.Framework or {} --- Creates the Plutonic Framework table if it doesn't exist.
-Plutonic.Constants = Plutonic.Constants or {} --- Creates the Plutonic Constants table if it doesn't exist.
-Plutonic.Interpolation = Plutonic.Interpolation or {} --- Creates the Plutonic Interpolation table if it doesn't exist.
-Plutonic.Hooks = Plutonic.Hooks or {} --- Creates the Plutonic Hooks table if it doesn't exist.
-Plutonic.FireRate = Plutonic.FireRate or {} --- Creates the Plutonic FireRate table if it doesn't exist.
+Plutonic = Plutonic or {
+	IsServer = SERVER, -- Saves interpreter instruction!
+	IsClient = CLIENT  -- Saves interpreter instruction!
+} -- Creates the Plutonic table if it doesn't exist.
+Plutonic.Enum = Plutonic.Enum or {} -- Creates the Plutonic Enum table if it doesn't exist.
+Plutonic.Framework = Plutonic.Framework or {} -- Creates the Plutonic Framework table if it doesn't exist.
+Plutonic.Constants = Plutonic.Constants or {} -- Creates the Plutonic Constants table if it doesn't exist.
+Plutonic.Interpolation = Plutonic.Interpolation or {} -- Creates the Plutonic Interpolation table if it doesn't exist.
+Plutonic.Hooks = Plutonic.Hooks or {} -- Creates the Plutonic Hooks table if it doesn't exist.
+Plutonic.FireRate = Plutonic.FireRate or {} -- Creates the Plutonic FireRate table if it doesn't exist.
+_Plutonic = _Plutonic or {} -- Creates the _Plutonic table if it doesn't exist. This houses the private data
 
 --- Does a fancy print to the console.
 -- @realm shared
 -- @string text The text to print.
 function Plutonic.Framework.Print(text)
-	if SERVER then
+	if Plutonic.IsServer then
 		MsgC(Color(10, 120, 255), "[Plutonic] ", Color(255, 200, 0), text .. "\n")
 	end
 end
@@ -56,22 +63,22 @@ function Plutonic.Framework.Link(path)
 		Plutonic.Framework.Link(path .. "/" .. directory)
 	end
 
-	for _, file in pairs(files) do
-		if string.sub(file, 1, 3) == "cl_" then
-			if CLIENT then
-				include(path .. "/" .. file)
+	for _, f in pairs(files) do
+		if string.sub(f, 1, 3) == "cl_" then
+			if Plutonic.IsClient then
+				include(path .. "/" .. f)
 			else
-				AddCSLuaFile(path .. "/" .. file)
+				AddCSLuaFile(path .. "/" .. f)
 			end
-		elseif string.sub(file, 1, 3) == "sv_" then
-			if SERVER then
-				include(path .. "/" .. file)
+		elseif string.sub(f, 1, 3) == "sv_" then
+			if Plutonic.IsServer then
+				include(path .. "/" .. f)
 			end
-		elseif string.sub(file, 1, 3) == "sh_" then
-			include(path .. "/" .. file)
+		elseif string.sub(f, 1, 3) == "sh_" then
+			include(path .. "/" .. f)
 
-			if SERVER then
-				AddCSLuaFile(path .. "/" .. file)
+			if Plutonic.IsServer then
+				AddCSLuaFile(path .. "/" .. f)
 			end
 		end
 	end
@@ -91,28 +98,30 @@ function Plutonic.Framework.LinkByRealm(path, realm)
 		Plutonic.Framework.LinkByRealm(path .. "/" .. directory, realm)
 	end
 
-	for _, file in pairs(files) do
-		Plutonic.Framework.Print("Including " .. file .. "...")
+	for _, f in pairs(files) do
+		Plutonic.Framework.Print("Including " .. f .. "...")
 		if realm == "CLIENT" then
-			if CLIENT then
-				include(path .. "/" .. file)
+			if Plutonic.IsClient then
+				include(path .. "/" .. f)
 			else
-				AddCSLuaFile(path .. "/" .. file)
+				AddCSLuaFile(path .. "/" .. f)
 			end
 		elseif realm == "SERVER" then
-			if SERVER then
-				include(path .. "/" .. file)
+			if Plutonic.IsServer then
+				include(path .. "/" .. f)
 			end
 		elseif realm == "SHARED" then
-			include(path .. "/" .. file)
+			include(path .. "/" .. f)
 
-			if SERVER then
-				AddCSLuaFile(path .. "/" .. file)
+			if Plutonic.IsServer then
+				AddCSLuaFile(path .. "/" .. f)
 			end
 		end
 	end
 end
 
+AddCSLuaFile("plutonic/framework/sh_hooks.lua")
+include("plutonic/framework/sh_hooks.lua")
 Plutonic.Framework.Link("plutonic/framework")
 Plutonic.Framework.Link("plutonic/modules")
 
